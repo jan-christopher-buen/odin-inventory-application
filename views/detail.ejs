@@ -1,0 +1,40 @@
+<%- include('partials/header') %>
+<a class="back" href="/<%= kind === 'category' ? 'categories' : 'items' %>">← Back to <%= kind === 'category' ? 'categories' : 'items' %></a>
+<section class="page-heading">
+  <div>
+    <p class="eyebrow"><%= kind %> DETAILS</p>
+    <h1><%= entity.name %></h1>
+  </div>
+  <div class="actions"><a class="button secondary" href="/<%= kind === 'category' ? 'categories' : 'items' %>/<%= entity.id %>/edit">Edit <%= kind %></a><a class="danger-link" href="/<%= kind === 'category' ? 'categories' : 'items' %>/<%= entity.id %>/delete">Delete</a>
+  </div>
+</section>
+<div class="detail-panel">
+  <p class="description"><%= entity.description || 'No description added.' %></p>
+  <% if (kind === 'item') { %>
+  <dl>
+    <div>
+      <dt>SKU</dt>
+      <dd><%= entity.sku %></dd>
+    </div>
+    <div>
+      <dt>Category</dt>
+      <dd><a href="/categories/<%= entity.category_id %>"><%= entity.category_name %></a></dd>
+    </div>
+    <div>
+      <dt>Price</dt>
+      <dd><%= money(entity.price) %></dd>
+    </div>
+    <div>
+      <dt>Stock quantity</dt>
+      <dd><%= entity.stock %></dd>
+    </div>
+  </dl>
+  <% } %>
+</div>
+<% if (kind === 'category') { %>
+<div class="section-heading">
+  <h2>Items on this shelf</h2><a href="/items/new">+ Add item</a>
+</div>
+<%- include('partials/items', { records }) %>
+<% } %>
+<%- include('partials/footer') %>

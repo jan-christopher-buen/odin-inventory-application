@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1"><title><%= title %> · Kanto Pantry</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="/style.css">
+  </head>
+  <body><a class="skip" href="#main">Skip to content</a>
+    <header class="site-header"><a class="brand" href="/"><span class="brand-icon" aria-hidden="true">K</span><span>Kanto Pantry<small>NEIGHBORHOOD INVENTORY</small></span></a>
+      <nav aria-label="Main navigation"><a href="/categories">Categories</a><a href="/items">All items</a><a class="button small" href="/items/new">+ Add item</a>
+      </nav>
+    </header>
+    <main id="main" tabindex="-1">
+      <% if (success) { %>
+      <p class="notice" role="status">Record <%= success %> successfully.</p>
+      <% } %>

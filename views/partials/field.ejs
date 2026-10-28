@@ -1,0 +1,9 @@
+<div class="field">
+  <label for="<%= name %>"><%= label %><%= required ? ' *' : '' %></label>
+  <% if (type === 'textarea') { %><textarea id="<%= name %>" name="<%= name %>" maxlength="<%= max %>" rows="5" aria-invalid="<%= Boolean(errors[name]) %>" aria-describedby="<%= name %>-hint <%= name %>-error"><%= values[name] || '' %></textarea>
+  <% } else { %>
+  <input id="<%= name %>" name="<%= name %>" type="<%= type %>" value="<%= values[name] ?? '' %>" <%= required ? 'required' : '' %> maxlength="<%= max %>" <% if (name === 'stock') { %>min="0" max="1000000" step="1"<% } %> <% if (name === 'price') { %>inputmode="decimal" pattern="(0|[1-9][0-9]{0,6})(\.[0-9]{1,2})?"<% } %> <% if (name === 'sku') { %>pattern="[A-Za-z0-9][A-Za-z0-9_\-]{0,39}"<% } %> aria-invalid="<%= Boolean(errors[name]) %>" aria-describedby="<%= name %>-hint <%= name %>-error">
+  <% } %>
+  <p class="hint" id="<%= name %>-hint"><%= hint %></p>
+  <p class="field-error" id="<%= name %>-error"><%= errors[name] || '' %></p>
+</div>

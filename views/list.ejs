@@ -1,0 +1,30 @@
+<%- include('partials/header') %>
+<section class="page-heading <%= typeof home !== 'undefined' ? 'hero' : '' %>">
+  <div>
+    <p class="eyebrow">THE NEIGHBORHOOD SHELF</p>
+    <h1><%= title %></h1>
+    <p class="lede">Keep everyday essentials in view. Browse your shelves, check stock, and make room for what’s next.</p>
+  </div><a class="button" href="/<%= kind === 'category' ? 'categories' : 'items' %>/new">+ Add <%= kind %></a>
+</section>
+<div class="section-heading">
+  <h2><%= kind === 'category' ? 'Browse categories' : 'On the shelves' %></h2><span class="muted"><%= records.length %> <%= kind === 'category' ? (records.length === 1 ? 'category' : 'categories') : (records.length === 1 ? 'item' : 'items') %></span>
+</div>
+<% if (kind === 'category') { %>
+<% if (!records.length) { %>
+<div class="empty">
+  <h2>Your shelves start here</h2>
+  <p>Create a category before adding items to your inventory.</p><a href="/categories/new">Create your first category →</a>
+</div>
+<% } %>
+<div class="category-grid">
+  <% for (const [index, category] of records.entries()) { %>
+  <article class="category-card"><span class="shelf-number" aria-hidden="true"><%= String(index + 1).padStart(2, '0') %></span><span class="badge"><%= category.item_count %> <%= category.item_count === 1 ? 'item' : 'items' %></span>
+    <h2><a href="/categories/<%= category.id %>"><%= category.name %></a></h2>
+    <p class="description"><%= category.description || 'Everyday essentials, neatly organized.' %></p><a class="text-link" href="/categories/<%= category.id %>">View shelf ↗</a>
+  </article>
+  <% } %>
+</div>
+<% } else { %>
+<%- include('partials/items', { records }) %>
+<% } %>
+<%- include('partials/footer') %>

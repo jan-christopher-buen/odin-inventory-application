@@ -1,0 +1,23 @@
+<%- include('partials/header') %><a class="back" href="/<%= kind === 'category' ? 'categories' : 'items' %>/<%= entity.id %>">← Back to details</a>
+<div class="form-heading">
+  <p class="eyebrow">PLEASE REVIEW</p>
+  <h1>Delete <%= entity.name %>?</h1>
+</div>
+<% if (error) { %>
+<p class="error-summary" role="alert"><%= error %></p>
+<% } %>
+<% if (records.length) { %>
+<div class="notice">
+  <h2>This category still has items</h2>
+  <p>Move or delete these items before deleting the category. Items will never be deleted automatically.</p>
+</div>
+<%- include('partials/items', { records }) %>
+<% } else { %>
+<form method="post" class="form-panel">
+  <p>This permanently removes this <%= kind %> from your inventory. This action cannot be undone.</p>
+  <%- include('partials/password', {error}) %>
+  <div class="actions"><button class="danger" type="submit">Delete <%= kind %></button><a href="/<%= kind === 'category' ? 'categories' : 'items' %>/<%= entity.id %>">Keep <%= kind %></a>
+  </div>
+</form>
+<% } %>
+<%- include('partials/footer') %>

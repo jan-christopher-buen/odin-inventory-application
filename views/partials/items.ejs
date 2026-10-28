@@ -1,0 +1,20 @@
+<% if (!records.length) { %>
+<div class="empty">
+  <h2>No items yet</h2>
+  <p>Add your first grocery item once a category is ready.</p><a href="/items/new">Add an item →</a>
+</div>
+<% } else { %>
+<div class="item-list">
+  <% for (const item of records) { %>
+  <article class="item-row">
+    <div>
+      <p class="eyebrow"><%= item.category_name %></p>
+      <h2><a href="/items/<%= item.id %>"><%= item.name %></a></h2>
+      <p class="muted">SKU <%= item.sku %></p>
+    </div>
+    <div class="item-numbers"><strong><%= money(item.price) %></strong><span class="badge"><%= item.stock %> in stock</span>
+    </div>
+  </article>
+  <% } %>
+</div>
+<% } %>

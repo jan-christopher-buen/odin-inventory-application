@@ -1,0 +1,51 @@
+<%- include('partials/header') %>
+<a class="back" href="/<%= kind === 'category' ? 'categories' : 'items' %>">← Back to inventory</a>
+<div class="form-heading">
+  <p class="eyebrow">KEEP YOUR SHELVES IN ORDER</p>
+  <h1><%= title %></h1>
+  <p class="muted">Fields marked * are required.</p>
+</div>
+<% if (kind === 'item' && !categories.length) { %>
+<div class="empty">
+  <h2>A category comes first</h2>
+  <p>Create a category so your new item has a place on the shelf.</p><a class="button" href="/categories/new">Create category</a>
+</div>
+<% } else { %>
+<form method="post" class="form-panel">
+  <% if (Object.keys(errors).length) { %>
+  <div class="error-summary" role="alert">
+    <h2>Please check your entries</h2>
+    <ul>
+      <% for (const [field, error] of Object.entries(errors)) { %>
+      <li><a href="#<%= field %>"><%= error %></a></li>
+      <% } %>
+    </ul>
+  </div>
+  <% } %>
+  <%- include('partials/field', {name:'name',label:'Name',type:'text',required:true,max:kind === 'category' ? 80 : 120,hint:kind === 'category' ? 'Up to 80 characters.' : 'Up to 120 characters.'}) %>
+  <%- include('partials/field', {name:'description',label:'Description',type:'textarea',required:false,max:kind === 'category' ? 500 : 2000,hint:kind === 'category' ? 'Optional. Up to 500 characters.' : 'Optional. Up to 2,000 characters.'}) %>
+  <% if (kind === 'item') { %>
+  <div class="field">
+    <label for="category_id">Category *</label>
+    <select id="category_id" name="category_id" required aria-invalid="<%= Boolean(errors.category_id) %>" aria-describedby="category-error">
+      <option value="">Choose a category</option>
+      <% for (const category of categories) { %>
+      <option value="<%= category.id %>" <%= String(values.category_id) === String(category.id) ? 'selected' : '' %>><%= category.name %></option>
+      <% } %>
+    </select>
+    <p class="field-error" id="category-error"><%= errors.category_id || '' %></p>
+  </div>
+  <%- include('partials/field', {name:'sku',label:'SKU',type:'text',required:true,max:40,hint:'1–40 letters, numbers, hyphens or underscores. Saved in uppercase.'}) %>
+  <div class="form-columns">
+    <%- include('partials/field', {name:'price',label:'Price (PHP)',type:'text',required:true,max:10,hint:'0–9,999,999.99; up to 2 decimal places.'}) %>
+    <%- include('partials/field', {name:'stock',label:'Stock quantity',type:'number',required:true,max:7,hint:'Whole number, 0–1,000,000.'}) %>
+  </div>
+  <% } %>
+  <% if (entity) { %>
+  <%- include('partials/password', {error:errors.admin_password}) %>
+  <% } %>
+  <div class="actions"><button type="submit"><%= entity ? 'Save changes' : 'Create ' + kind %></button><a href="/<%= kind === 'category' ? 'categories' : 'items' %><%= entity ? '/' + entity.id : '' %>">Cancel</a>
+  </div>
+</form>
+<% } %>
+<%- include('partials/footer') %>
