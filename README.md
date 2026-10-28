@@ -2,6 +2,8 @@
 
 A server-rendered inventory management app built with Express, EJS, and PostgreSQL, featuring category and item CRUD with validated forms.
 
+[Live demo](https://odin-inventory-application-zfj4.onrender.com/)
+
 ## Kanto Pantry
 
 A fictional neighborhood grocery inventory for [The Odin Project](https://www.theodinproject.com/lessons/node-path-nodejs-inventory-application). Browse categories and items, track stock, and manage product details through responsive, server-rendered forms.
@@ -106,4 +108,4 @@ Configure the new Render service with Node, branch `main`, build command `npm ci
 
 Schema setup and seeding remain separate release steps, never build/start commands. Free services can sleep when idle; PostgreSQL data persists independently in Neon. See the official [Render Express deployment guide](https://render.com/docs/deploy-node-express-app), [Render Free limitations](https://render.com/docs/free), and [Neon connection guide](https://neon.com/docs/connect/connect-from-any-app).
 
-No live URL has been confirmed yet.
+The live application runs on Render with a dedicated Neon PostgreSQL database.
