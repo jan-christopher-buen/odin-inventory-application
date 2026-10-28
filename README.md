@@ -54,6 +54,7 @@ Open `http://localhost:3000`. Schema setup is non-destructive and repeatable. Se
 | `DATABASE_URL`      | Hosted PostgreSQL connection URL; takes precedence over separate connection fields  |
 | `PORT`              | HTTP port, default `3000`                                                           |
 | `ADMIN_PASSWORD`    | Private shared confirmation password; blank or missing disables protected mutations |
+| `HOSTED_DB_HOST`    | Explicitly confirmed Neon hostname for guarded hosted setup/seed commands           |
 | `TEST_DATABASE_URL` | Optional test connection, restricted to a loopback host and `odin_inventory_test`   |
 
 For local peer authentication use the socket settings in `.env.example`. For hosted PostgreSQL use a provider-issued `DATABASE_URL` with verified TLS (for example, a URL ending in `?sslmode=verify-full`). Keep credentials in private environment configuration. Production can inject variables directly; `npm start` does not require an environment file. Schema setup is an explicit release step, separate from server startup.
@@ -86,4 +87,23 @@ Reading and creation are public. Updates and deletes require the shared admin pa
 
 Routes use GET for lists, details, and forms; POST for creation, editing, and deletion. Successful mutations redirect to a GET page. Controllers validate submissions, focused query functions handle parameterized SQL, and EJS partials share navigation, fields, and item lists.
 
-Deployment is intended for a Render Web Service with a dedicated Neon PostgreSQL database. No live deployment is configured yet.
+## Deployment
+
+Use a dedicated Neon Free project/database and a new Render Free Web Service. Keep other projects and their resources separate.
+
+Create a private, gitignored `.env.hosted` with `DATABASE_URL`, `ADMIN_PASSWORD`, and `HOSTED_DB_HOST` (the hostname from the same Neon Connect dialog). The database must be named `odin_inventory`. Use the provider connection string with TLS enabled. Never commit this file.
+
+After confirming the target, initialize it explicitly:
+
+```sh
+npm run db:setup:hosted
+npm run db:seed:hosted  # optional, preserves existing sample records and edits
+```
+
+These commands verify the hostname, database name, TLS configuration, and absence of unrelated public tables before writing. They do not reset data. Do not run integration tests against the hosted database.
+
+Configure the new Render service with Node, branch `main`, build command `npm ci`, start command `npm start`, and health check path `/`. Select the **Free** instance type. Set `NODE_ENV=production`, `DATABASE_URL`, and `ADMIN_PASSWORD` privately before the initial deployment. Render supplies `PORT`; the server binds to `0.0.0.0`. The repository pins the Node runtime in `.node-version` and trusts Render's nearest reverse proxy for rate limiting.
+
+Schema setup and seeding remain separate release steps, never build/start commands. Free services can sleep when idle; PostgreSQL data persists independently in Neon. See the official [Render Express deployment guide](https://render.com/docs/deploy-node-express-app), [Render Free limitations](https://render.com/docs/free), and [Neon connection guide](https://neon.com/docs/connect/connect-from-any-app).
+
+No live URL has been confirmed yet.

@@ -4,6 +4,8 @@ import { inventoryRoutes } from './routes/inventory.js'
 import * as db from './db/queries.js'
 export const app = express()
 app.disable('x-powered-by')
+// Render terminates public connections at its reverse proxy.
+if (process.env.RENDER === 'true') app.set('trust proxy', 1)
 app.set('view engine', 'ejs')
 app.set('views', fileURLToPath(new URL('./views', import.meta.url)))
 app.use((req, res, next) => {
